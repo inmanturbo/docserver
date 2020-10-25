@@ -9,7 +9,7 @@ services:
         env_file: 
             - office.env
         ports:
-            - "80:80"
+            - "{OFFICE_PORT}:80"
         networks:
             - office-network
         volumes:
