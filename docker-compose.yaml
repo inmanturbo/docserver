@@ -1,0 +1,34 @@
+version: '2'
+
+services:
+    office:
+        image: onlyoffice/documentserver
+        restart: always
+        links:
+            - redis
+        command: --bind-address=0.0.0.0
+        env_file: 
+            - office.env
+        ports:
+            - "80:80"
+        networks:
+            - office-network
+        volumes:
+            - ./.local/var/log/onlyoffice:/var/log/onlyoffice 
+            - ./.local/etc/nginx:/var/etc/nginx 
+            - ./.local/var/log/nginx:/var/log/nginx 
+            - ./.local/mnt:/var/www/onlyoffice/Data
+            - ./.local/var/lib/onlyoffice:/var/lib/onlyoffice
+            - ./.local/var/lib/postgresql:/var/lib/postgresql
+    redis:
+        image: clearlinux/redis
+        command: redis-server
+        ports: 
+            - "3456:6379"
+        networks: 
+            - office-network     
+networks:
+    office-network:
+        driver: bridge
+
+
